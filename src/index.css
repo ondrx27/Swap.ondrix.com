@@ -1,0 +1,954 @@
+@import 'tailwindcss';
+@import '@solana/wallet-adapter-react-ui/styles.css';
+
+/* =============================================
+   ONDRX JUPITER EXCHANGE DESIGN SYSTEM v3.0 "Aurora Breath"
+   ============================================= */
+
+/* Font imports */
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* CSS Variables matching ondrix design system */
+:root {
+  /* Aurora Color Palette */
+  --primary: #00FF88;
+  --primary-dim: #00CC6A;
+  --primary-darker: #00AA55;
+  --accent: #88FFD0;
+  --accent-glow: #00FF88;
+  --header-accent: #15FF93;
+
+  /* Functional Colors */
+  --success: #10B981;
+  --warning: #FBBF24;
+  --error: #F87171;
+
+  /* Deep Space Surfaces */
+  --dark: #030503;
+  --surface-1: #050805;
+  --surface-2: #0A0F0A;
+  --surface-3: #0F150F;
+  --surface-4: #141C14;
+  --surface-glass: rgba(8, 16, 8, 0.85);
+
+  /* Border System */
+  --border-subtle: rgba(255, 255, 255, 0.04);
+  --border-light: rgba(255, 255, 255, 0.08);
+  --border-medium: rgba(255, 255, 255, 0.12);
+  --border-accent: rgba(0, 255, 136, 0.15);
+  --border-accent-strong: rgba(0, 255, 136, 0.3);
+
+  /* Text Colors */
+  --text: #FFFFFF;
+  --text-secondary: #C8E6C9;
+  --text-muted: #8FAF8F;
+  --text-dim: #5A7A5A;
+
+  /* Card System */
+  --card-padding: 2.5rem;
+  --card-radius: 24px;
+
+  /* Button System */
+  --btn-height-sm: 40px;
+  --btn-height-md: 48px;
+  --btn-height-lg: 56px;
+  --btn-radius: 9999px;
+
+  /* Shadows */
+  --shadow-glow: 0 0 60px rgba(0, 255, 136, 0.08);
+  --shadow-glow-strong: 0 0 100px rgba(0, 255, 136, 0.15);
+
+  /* Animation */
+  --animation-fast: 0.2s;
+  --animation-normal: 0.4s;
+  --animation-slow: 0.6s;
+  --easing-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Global Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  background-color: var(--surface-1);
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--surface-1);
+  color: var(--text);
+  font-family: 'Space Grotesk', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* Aurora background effect */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse 80% 50% at 50% 120%, rgba(0, 255, 136, 0.12) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Typography */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  line-height: 1.1;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.7;
+}
+
+::selection {
+  background: var(--primary);
+  color: var(--dark);
+}
+
+/* ==================== BUTTONS ==================== */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  transition: all 0.3s var(--easing-smooth);
+  cursor: pointer;
+  border: none;
+}
+
+.btn-primary {
+  background: linear-gradient(120deg, #00f2a6, #00b36b);
+  color: var(--dark);
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+  box-shadow: 0 10px 30px rgba(0, 242, 166, 0.25);
+}
+
+.btn-primary:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 40px rgba(0, 242, 166, 0.4);
+  filter: brightness(1.1);
+}
+
+.btn-secondary {
+  background: transparent;
+  border: 1px solid var(--border-accent);
+  color: var(--text);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 9999px;
+}
+
+.btn-secondary:hover {
+  background: var(--primary);
+  color: var(--dark);
+  border-color: transparent;
+  transform: translateY(-2px);
+}
+
+.glow-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  padding: 0.75rem 1.75rem;
+  border-radius: 9999px;
+  cursor: pointer;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  background: linear-gradient(120deg, #00f2a6, #00b36b);
+  color: #021b10;
+  box-shadow: 0 10px 30px rgba(0, 242, 166, 0.25);
+  letter-spacing: 0.05em;
+  transition: all 0.3s ease;
+  border: none;
+}
+
+.glow-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 40px rgba(0, 242, 166, 0.4);
+  filter: brightness(1.1);
+}
+
+.glow-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* ==================== CARDS ==================== */
+.card {
+  background-color: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  transition: all 0.3s var(--easing-smooth);
+}
+
+.card:hover {
+  background-color: var(--surface-3);
+  border-color: var(--border-accent);
+  transform: translateY(-4px);
+}
+
+.glass {
+  background: linear-gradient(145deg, rgba(10, 15, 10, 0.95) 0%, rgba(15, 21, 15, 0.9) 100%);
+  border: 1px solid var(--border-subtle);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--card-radius);
+}
+
+.glass:hover {
+  border-color: var(--border-accent);
+}
+
+/* ==================== FORM INPUTS ==================== */
+.input-field {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: var(--text);
+  width: 100%;
+  font-family: 'Space Grotesk', sans-serif;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.input-field::placeholder {
+  color: var(--text-muted);
+}
+
+.input-field:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.1);
+}
+
+/* ==================== SWAP PANEL ==================== */
+.swap-panel {
+  background: linear-gradient(145deg, rgba(10, 15, 10, 0.95) 0%, rgba(15, 21, 15, 0.9) 100%);
+  border: 1px solid var(--border-light);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  max-width: 480px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.token-input-container {
+  background-color: var(--surface-1);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.token-input-container:focus-within {
+  border-color: var(--border-accent);
+}
+
+.token-selector {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--surface-3);
+  border: 1px solid var(--border-light);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.token-selector:hover {
+  border-color: var(--border-accent);
+  background-color: var(--surface-4);
+}
+
+.token-amount-input {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1.5rem;
+  font-weight: 600;
+  font-family: 'Space Grotesk', sans-serif;
+  width: 100%;
+  outline: none;
+}
+
+.token-amount-input::placeholder {
+  color: var(--text-dim);
+}
+
+.swap-arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: var(--surface-3);
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin: 0.5rem auto;
+  color: var(--primary);
+}
+
+.swap-arrow:hover {
+  background-color: var(--primary);
+  color: var(--dark);
+  border-color: var(--primary);
+  transform: rotate(180deg);
+}
+
+/* ==================== BUY CRYPTO MODAL ==================== */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-content {
+  background: linear-gradient(145deg, rgba(10, 15, 10, 0.98) 0%, rgba(15, 21, 15, 0.98) 100%);
+  border: 1px solid var(--border-accent);
+  border-radius: var(--card-radius);
+  padding: 2rem;
+  max-width: 500px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.provider-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.25rem;
+  background: var(--surface-2);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.provider-card:hover {
+  background: var(--surface-3);
+  border-color: var(--primary);
+  transform: translateX(4px);
+}
+
+/* ==================== HEADER ==================== */
+header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(5, 8, 5, 0.8);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border-subtle);
+  padding: 1rem 2rem;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.header-logo img {
+  width: 42px;
+  height: 42px;
+}
+
+/* ==================== HERO SECTION ==================== */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8rem 2rem 4rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-aurora {
+  position: absolute;
+  pointer-events: none;
+  bottom: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 120%;
+  height: 80%;
+  background: radial-gradient(ellipse 60% 40% at 50% 100%,
+      rgba(0, 255, 136, 0.2) 0%,
+      rgba(0, 255, 136, 0.08) 40%,
+      transparent 70%);
+  animation: auroraBreath 8s ease-in-out infinite;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 10;
+  max-width: 600px;
+  animation: fadeInUp 1s var(--easing-smooth) forwards;
+}
+
+.hero-title {
+  font-size: clamp(2.5rem, 8vw, 4rem);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  letter-spacing: -0.04em;
+  background: linear-gradient(180deg, #FFFFFF 0%, #C8E6C9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--primary);
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.hero-description {
+  font-size: 1rem;
+  color: var(--text-muted);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+/* ==================== FOOTER ==================== */
+footer {
+  padding: 60px 5% 30px;
+  background: linear-gradient(180deg, rgba(5, 8, 5, 0.8) 0%, var(--surface-1) 100%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(0, 255, 136, 0.1);
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1.2fr;
+  gap: 30px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.footer-logo {
+  font-family: 'Inter', sans-serif;
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--header-accent);
+}
+
+.footer-about p {
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 25px;
+  line-height: 1.7;
+  opacity: 0.8;
+  color: var(--text-secondary);
+}
+
+.footer-links h4 {
+  font-family: 'Space Grotesk', monospace;
+  font-size: 1.3rem;
+  margin-bottom: 20px;
+  color: var(--header-accent);
+}
+
+.footer-links ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.footer-links li {
+  margin-bottom: 12px;
+}
+
+.footer-links a {
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  text-decoration: none;
+  opacity: 0.8;
+  transition: all 0.3s ease;
+}
+
+.footer-links a:hover {
+  opacity: 1;
+  color: var(--header-accent);
+  padding-left: 5px;
+}
+
+.footer-social-links {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.footer-social-links a {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+  text-decoration: none;
+  padding: 8px 0;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+}
+
+.footer-social-links a svg {
+  width: 24px;
+  height: 24px;
+  color: var(--header-accent);
+  transition: transform 0.3s ease;
+}
+
+.footer-social-links a:hover {
+  color: var(--header-accent);
+  transform: translateX(5px);
+}
+
+.footer-social-links a:hover svg {
+  transform: scale(1.2);
+}
+
+.copyright {
+  text-align: center;
+  padding-top: 40px;
+  margin-top: 40px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  opacity: 0.7;
+}
+
+/* ==================== WALLET ADAPTER OVERRIDES ==================== */
+.wallet-adapter-button {
+  min-width: 180px !important;
+  justify-content: center !important;
+  border-radius: 9999px !important;
+  font-weight: 600 !important;
+  color: var(--dark) !important;
+  background: linear-gradient(120deg, #00f2a6, #00b36b) !important;
+  box-shadow: 0 10px 30px rgba(0, 242, 166, 0.25) !important;
+  font-family: 'Space Grotesk', sans-serif !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.05em !important;
+  border: none !important;
+  transition: all 0.2s ease !important;
+}
+
+.wallet-adapter-button:not([disabled]):hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 15px 40px rgba(0, 242, 166, 0.4) !important;
+  filter: brightness(1.1) !important;
+}
+
+.wallet-adapter-button[disabled] {
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+}
+
+.wallet-adapter-modal-wrapper {
+  z-index: 9999 !important;
+}
+
+.wallet-adapter-modal-overlay {
+  background: rgba(0, 0, 0, 0.8) !important;
+  backdrop-filter: blur(8px) !important;
+  z-index: 9998 !important;
+}
+
+.wallet-adapter-modal-container {
+  background: var(--surface-2) !important;
+  border-radius: var(--card-radius) !important;
+  border: 1px solid var(--border-light) !important;
+}
+
+.wallet-adapter-modal-title {
+  color: var(--text) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+.wallet-adapter-modal-list-item {
+  background: var(--surface-1) !important;
+  border-radius: 12px !important;
+}
+
+.wallet-adapter-modal-list-item:hover {
+  background: var(--surface-3) !important;
+  border-color: var(--border-accent) !important;
+}
+
+.wallet-adapter-dropdown {
+  background: var(--surface-2) !important;
+  border: 1px solid var(--border-light) !important;
+  border-radius: var(--card-radius) !important;
+}
+
+.wallet-adapter-dropdown-list-item {
+  color: var(--text) !important;
+}
+
+.wallet-adapter-dropdown-list-item:hover {
+  background: var(--surface-3) !important;
+}
+
+/* ==================== ANIMATIONS ==================== */
+@keyframes auroraBreath {
+
+  0%,
+  100% {
+    opacity: 0.8;
+    transform: translateX(-50%) scale(1);
+  }
+
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.1);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+@keyframes float {
+
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ==================== RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .footer-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+  }
+
+  .footer-about,
+  .footer-social-links {
+    grid-column: 1 / -1;
+    text-align: center;
+  }
+}
+
+@media (max-width: 768px) {
+  header {
+    padding: 0.75rem 1rem;
+  }
+
+  /* Hide navigation on mobile */
+  .header-nav {
+    display: none !important;
+  }
+
+  /* Compact wallet section */
+  .header-wallet {
+    gap: 0.5rem !important;
+  }
+
+  /* Hide balance on small screens */
+  .header-balance {
+    display: none !important;
+  }
+
+  /* Logo on mobile - keep text, larger icon like ondrix-promotion-site */
+  .header-logo {
+    font-size: 1.25rem;
+  }
+
+  .header-logo img {
+    width: 42px;
+    height: 42px;
+  }
+
+  /* Wallet button mobile optimization */
+  .wallet-adapter-button {
+    padding: 0.5rem 0.75rem !important;
+    font-size: 0.8rem !important;
+    height: 38px !important;
+    min-width: unset !important;
+    white-space: nowrap;
+  }
+
+  .wallet-adapter-button-trigger {
+    padding: 0.5rem 0.75rem !important;
+  }
+
+  /* Truncate wallet address on mobile */
+  .wallet-adapter-button span {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .hero {
+    padding: 6rem 1rem 2rem;
+  }
+
+  .hero-title {
+    font-size: 2rem;
+  }
+
+  .swap-panel {
+    padding: 1.5rem;
+  }
+
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    text-align: center;
+  }
+
+  .footer-links a:hover {
+    padding-left: 0;
+  }
+
+  .footer-social-links {
+    align-items: center;
+  }
+}
+
+/* Extra small screens */
+@media (max-width: 390px) {
+  header {
+    padding: 0.5rem 0.75rem;
+  }
+
+  /* Keep logo visible but slightly smaller */
+  .header-logo {
+    font-size: 1rem;
+  }
+
+  .header-logo img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .wallet-adapter-button {
+    padding: 0.4rem 0.6rem !important;
+    font-size: 0.75rem !important;
+    height: 34px !important;
+  }
+
+  .wallet-adapter-button span {
+    max-width: 60px;
+  }
+
+  /* Exact amount footnote */
+  .exact-amount-note {
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    margin-top: 0.25rem;
+    font-family: monospace;
+    opacity: 0.8;
+  }
+}
+
+/* ==================== MOBILE SWAP OPTIMIZATION ==================== */
+@media (max-width: 480px) {
+
+  /* Make the container feel "free" and spacious */
+  /* Make the container feel "free" and spacious */
+  .swap-panel {
+    padding: 1.5rem 0.5rem !important;
+    /* Minimal side padding */
+    border: none !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    max-width: 100% !important;
+  }
+
+  /* Cleaner input containers with more space */
+  .token-input-container {
+    padding: 1rem 0.6rem !important;
+    /* Further optimized padding */
+    /* Reduced side padding for more width */
+    border-radius: 24px !important;
+    background-color: var(--surface-2) !important;
+    border: 1px solid rgba(255, 255, 255, 0.03) !important;
+    margin-bottom: 0.5rem !important;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  /* Input row wrapper for mobile */
+  .mobile-input-row {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+    /* Reduced gap */
+    width: 100% !important;
+  }
+
+  /* Large, readable numbers */
+  .token-amount-input {
+    font-size: 2rem !important;
+    /* 2.25rem might be too big, trying 2rem */
+    height: auto !important;
+    letter-spacing: -0.03em !important;
+    font-weight: 500 !important;
+    padding: 0 !important;
+  }
+
+  /* Prevent overflow for long numbers */
+  .token-amount-input {
+    min-width: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  /* Tactile token selector pills */
+  .token-selector {
+    padding: 0.75rem 1rem !important;
+    border-radius: 14px !important;
+    background: var(--surface-3) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+  }
+
+  .token-selector span {
+    font-size: 1.1rem !important;
+    font-weight: 700 !important;
+  }
+
+  /* Floating swap arrow with space */
+  .swap-arrow {
+    width: 48px !important;
+    /* Slightly smaller for better proportion */
+    height: 48px !important;
+    border-radius: 16px !important;
+    margin: -12px auto !important;
+    /* Reduced overlap */
+    position: relative;
+    z-index: 10;
+    background: var(--surface-3) !important;
+    border: 4px solid var(--background) !important;
+    /* Cutout effect */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    color: var(--text) !important;
+    /* Ensure icon is visible */
+    transition: all 0.2s ease !important;
+  }
+
+  .swap-arrow:active {
+    transform: scale(0.95);
+    background: var(--surface-2) !important;
+    color: var(--primary) !important;
+    /* Green on press */
+  }
+
+  .swap-arrow svg {
+    stroke: currentColor !important;
+    /* Force SVG to use text color */
+  }
+
+  /* Huge, tappable CTA button */
+  .glow-button {
+    padding: 1.25rem !important;
+    font-size: 1.2rem !important;
+    border-radius: 20px !important;
+    margin-top: 1.5rem !important;
+    font-weight: 700 !important;
+    box-shadow: 0 8px 32px rgba(0, 255, 136, 0.2) !important;
+  }
+}
