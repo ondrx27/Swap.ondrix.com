@@ -15,6 +15,8 @@ import { checkSufficientBalance } from '../utils/solanaUtils';
 const JUPITER_API = 'https://api.jup.ag';
 const API_KEY = import.meta.env.VITE_JUPITER_API_KEY || '';
 const MOCK_MODE = false;
+const SOL_MINT = 'So11111111111111111111111111111111111111112';
+const SOL_FEE_BUFFER = 0.01; // Reserve for transaction fees when using MAX
 
 type SwapProvider = 'jupiter' | 'raydium' | null;
 
@@ -242,7 +244,7 @@ export const SwapPanel: React.FC = () => {
 
                 if (swapTransactionBase64) {
                     // Deserialize and send to wallet for signing
-                    const transactionBuffer = Buffer.from(swapTransactionBase64, 'base64');
+                    const transactionBuffer = Uint8Array.from(atob(swapTransactionBase64), c => c.charCodeAt(0));
                     const transaction = VersionedTransaction.deserialize(transactionBuffer);
 
                     try {
@@ -331,15 +333,49 @@ export const SwapPanel: React.FC = () => {
                 }
 
                 const data = await response.json();
-                // Raydium returns transaction in data.data
-                if (data.data && data.data[0]) {
-                    swapTransactionBase64 = data.data[0].transaction;
+
+                // Raydium may return multiple transactions (ATA creation, SOL wrap, swap).
+                // Sign and send each one sequentially before proceeding.
+                if (data.data && Array.isArray(data.data) && data.data.length > 0) {
+                    let lastSig = '';
+
+                    for (let i = 0; i < data.data.length; i++) {
+                        const txBase64 = data.data[i].transaction;
+                        if (!txBase64) continue;
+
+                        const txBuffer = Uint8Array.from(atob(txBase64), c => c.charCodeAt(0));
+                        const tx = VersionedTransaction.deserialize(txBuffer);
+                        const signed = await signTransaction(tx);
+
+                        const sig = await connection.sendRawTransaction(signed.serialize(), {
+                            skipPreflight: false,
+                            preflightCommitment: 'confirmed',
+                        });
+
+                        const confirmPromise = connection.confirmTransaction(sig, 'confirmed');
+                        const timeoutPromise = new Promise<{ value: { err: unknown } }>((_, reject) =>
+                            setTimeout(() => reject(new Error('Transaction confirmation timed out')), 60000)
+                        );
+                        const result = await Promise.race([confirmPromise, timeoutPromise]) as Awaited<ReturnType<typeof connection.confirmTransaction>>;
+
+                        if (result.value.err) {
+                            throw new Error(`Raydium transaction ${i + 1}/${data.data.length} failed: ${JSON.stringify(result.value.err)}`);
+                        }
+
+                        lastSig = sig;
+                    }
+
+                    setLastTxSignature(lastSig);
+                    setSwapSuccess(true);
+                    setFromAmount('');
+                    setToAmount('');
+                    refreshBalance();
                 }
             }
 
-            // Sign and send the transaction
+            // Jupiter: sign and send the single transaction
             if (swapTransactionBase64) {
-                const transactionBuffer = Buffer.from(swapTransactionBase64, 'base64');
+                const transactionBuffer = Uint8Array.from(atob(swapTransactionBase64), c => c.charCodeAt(0));
                 const transaction = VersionedTransaction.deserialize(transactionBuffer);
 
                 // Sign with wallet
@@ -352,14 +388,11 @@ export const SwapPanel: React.FC = () => {
                 });
 
                 // Wait for confirmation with timeout strategy
-                // Race between confirmation and timeout
                 const confirmationPromise = connection.confirmTransaction(signature, 'confirmed');
                 const timeoutPromise = new Promise<{ value: { err: unknown } }>((_, reject) =>
                     setTimeout(() => reject(new Error('Transaction confirmation timed out')), 60000)
                 );
 
-                // Race the confirmation against the timeout
-                // We cast connection.confirmTransaction result to match our timeout promise for easier racing
                 const confirmation = await Promise.race([
                     confirmationPromise,
                     timeoutPromise
@@ -369,13 +402,11 @@ export const SwapPanel: React.FC = () => {
                     throw new Error('Transaction failed: ' + JSON.stringify(confirmation.value.err));
                 }
 
-                setLastTxSignature(signature); // Store signature
+                setLastTxSignature(signature);
                 setSwapSuccess(true);
                 setFromAmount('');
                 setToAmount('');
                 refreshBalance();
-
-                // Removed auto-close timeout to let user see and copy the hash
             }
         } catch (err: unknown) {
             // Allow user rejection to pass silently or with specific message
@@ -463,7 +494,13 @@ export const SwapPanel: React.FC = () => {
                         <span style={{ fontSize: '0.875rem', color: 'var(--text-muted)' }}>From</span>
                         {connected && fromToken && (
                             <button
-                                onClick={() => setFromAmount(fromTokenBalance.toString())}
+                                onClick={() => {
+                                    const isSOL = fromToken?.address === SOL_MINT;
+                                    const max = isSOL
+                                        ? Math.max(0, fromTokenBalance - SOL_FEE_BUFFER)
+                                        : fromTokenBalance;
+                                    setFromAmount(max.toString());
+                                }}
                                 style={{
                                     background: 'transparent',
                                     border: 'none',
