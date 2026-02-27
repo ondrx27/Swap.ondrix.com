@@ -328,7 +328,7 @@ p {
   transform: rotate(180deg);
 }
 
-/* ==================== BUY CRYPTO MODAL ==================== */
+/* ==================== MODAL ==================== */
 .modal-overlay {
   position: fixed;
   inset: 0;
@@ -351,24 +351,6 @@ p {
   width: 100%;
   max-height: 90vh;
   overflow-y: auto;
-}
-
-.provider-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1.25rem;
-  background: var(--surface-2);
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.provider-card:hover {
-  background: var(--surface-3);
-  border-color: var(--primary);
-  transform: translateX(4px);
 }
 
 /* ==================== HEADER ==================== */

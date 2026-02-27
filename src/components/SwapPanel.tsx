@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { ArrowDownUp, Loader2, AlertCircle, Wallet, Check, Copy, ExternalLink } from 'lucide-react';
 import { TokenSelector } from './TokenSelector';
-// import { BuyDialog } from './BuyDialog';
 import { Token } from '../types';
 import { POPULAR_TOKENS } from '../services/jupiter';
 import { getRaydiumQuote } from '../services/raydium';
@@ -16,7 +15,6 @@ import { checkSufficientBalance } from '../utils/solanaUtils';
 const JUPITER_API = 'https://api.jup.ag';
 const API_KEY = import.meta.env.VITE_JUPITER_API_KEY || '';
 const MOCK_MODE = false;
-const BUYABLE_TOKENS = ['SOL', 'USDT', 'USDC'];
 
 type SwapProvider = 'jupiter' | 'raydium' | null;
 
@@ -31,7 +29,6 @@ export const SwapPanel: React.FC = () => {
     const [toAmount, setToAmount] = useState<string>('');
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    // const [showBuyDialog, setShowBuyDialog] = useState(false);
     const [slippage, setSlippage] = useState(0.5); // 0.5%
     const [provider, setProvider] = useState<SwapProvider>(null);
     const [notTradable, setNotTradable] = useState(false);
@@ -191,7 +188,6 @@ export const SwapPanel: React.FC = () => {
             if (!sufficient) {
                 setInsufficientBalance(true);
                 setShortfall(diff);
-                // setShowBuyDialog(true); // Temporarily disabled
                 return;
             }
         }
@@ -416,7 +412,7 @@ export const SwapPanel: React.FC = () => {
         if (notTradable) return true;
         if (!fromAmount || parseFloat(fromAmount) <= 0) return true;
         if (!fromToken || !toToken) return true;
-        // Disable for insufficient balance (On-ramp disabled)
+        // Disable for insufficient balance
         if (insufficientBalance) return true;
 
         return false;
@@ -617,10 +613,7 @@ export const SwapPanel: React.FC = () => {
                         fontSize: '0.875rem'
                     }}>
                         <AlertCircle size={16} />
-                        {BUYABLE_TOKENS.includes(fromToken?.symbol || '')
-                            ? `Need ${shortfall.toFixed(4)} more ${fromToken?.symbol}. Click swap to buy crypto.`
-                            : `Not enough ${fromToken?.symbol}. You need ${shortfall.toFixed(4)} more.`
-                        }
+                        Not enough {fromToken?.symbol}. You need {shortfall.toFixed(4)} more.
                     </div>
                 )}
 
@@ -634,16 +627,10 @@ export const SwapPanel: React.FC = () => {
                         marginTop: '1.5rem',
                         padding: '1rem',
                         fontSize: '1rem',
-                        background: insufficientBalance && !isButtonDisabled() && !MOCK_MODE && BUYABLE_TOKENS.includes(fromToken?.symbol || '')
-                            ? 'linear-gradient(120deg, #f59e0b, #d97706)'
-                            : undefined
                     }}
                 >
                     {(loading || balanceLoading) && <Loader2 size={18} className="animate-spin" />}
-                    {insufficientBalance && connected && fromAmount && !MOCK_MODE
-                        ? 'Not Enough Tokens'
-                        : getButtonText()
-                    }
+                    {getButtonText()}
                 </button>
 
                 {/* Powered by */}
@@ -656,16 +643,6 @@ export const SwapPanel: React.FC = () => {
                     Powered by <span style={{ color: 'var(--primary)' }}>Jupiter</span> + <span style={{ color: '#9b59b6' }}>Raydium</span>
                 </div>
             </div>
-
-            {/* Buy Crypto Dialog */}
-            {/* Buy Crypto Dialog - Temporarily Disabled */}
-            {/* <BuyDialog
-                isOpen={showBuyDialog}
-                onClose={() => setShowBuyDialog(false)}
-                userWalletAddress={publicKey?.toString()}
-                tokenSymbol={fromToken?.symbol || 'SOL'}
-                requiredAmount={shortfall} // Pass shortfall number, not boolean
-            /> */}
 
             {/* Success Modal */}
             {swapSuccess && createPortal(

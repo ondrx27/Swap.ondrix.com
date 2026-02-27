@@ -122,26 +122,6 @@ const AppContent: React.FC = () => {
               </div>
             </div>
 
-            {/* Fiat On-Ramp Notice */}
-            <div style={{
-              marginTop: '4rem',
-              padding: '1.5rem',
-              background: 'rgba(255, 255, 255, 0.03)',
-              border: '1px solid var(--border-subtle)',
-              borderRadius: '12px',
-              textAlign: 'center',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: '0.5rem'
-            }}>
-              <h4 style={{ fontSize: '1rem', fontWeight: 600, color: 'var(--text-dim)', marginBottom: '0.25rem' }}>
-                Implementation Status
-              </h4>
-              <p style={{ color: 'var(--text-muted)', fontSize: '0.9rem', maxWidth: '600px', margin: 0 }}>
-                Fiat on-ramp integrations (such as MoonPay or Transak) are currently under evaluation and may be integrated in the future once compliance requirements are completed.
-              </p>
-            </div>
           </div>
         </section>
       </main>
